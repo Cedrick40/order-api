@@ -6,3 +6,7 @@
 
 - Wrote design doc (docs/02-design.md): data model, endpoints, error design, order flow, security plan.
 - Recorded design decisions D5-D12 in decisions.md.
+
+- Set up virtual environment, Django project, 4 apps, PostgreSQL database.
+- Created custom User model (email login, role field) before first migration.
+- First smoke test passing.

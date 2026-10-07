@@ -10,3 +10,6 @@
 - 2026-10-07 D10: Products are deactivated, never deleted. Reason: keeps order history intact.
 - 2026-10-07 D11: Audit entry written in the same transaction as the change. Reason: the change and its record can never disagree.
 - 2026-10-07 D12: HTTP 409 for stock and status conflicts. Reason: the request is valid but conflicts with the current state.
+
+- 2026-10-07 D13: Secrets and DB settings come from a .env file, never from Git. A .env.example documents the variables. Reason: security and reproducibility.
+- 2026-10-07 D14: Tests use pytest + pytest-django. Reason: less boilerplate than unittest and easy coverage reports.
