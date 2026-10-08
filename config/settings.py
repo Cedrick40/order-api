@@ -26,6 +26,10 @@ load_dotenv(BASE_DIR / ".env")
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ["SECRET_KEY"]
+from django.core.exceptions import ImproperlyConfigured
+
+if len(SECRET_KEY) < 32:
+    raise ImproperlyConfigured("SECRET_KEY must be at least 32 characters long.")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
@@ -146,6 +150,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 20,
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "EXCEPTION_HANDLER": "core.exceptions.custom_exception_handler",
 }
 
 SIMPLE_JWT = {

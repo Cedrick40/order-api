@@ -13,3 +13,7 @@
 
 - 2026-10-07 D13: Secrets and DB settings come from a .env file, never from Git. A .env.example documents the variables. Reason: security and reproducibility.
 - 2026-10-07 D14: Tests use pytest + pytest-django. Reason: less boilerplate than unittest and easy coverage reports.
+
+- 2026-10-08 D15: Error handler built before any feature. Reason: every test from now on can check the standard error shape.
+- 2026-10-08 D16: Customer profile is created together with the user in one transaction at registration. Reason: no user without a profile.
+- 2026-10-08 D17: Login and token refresh use SimpleJWT's views instead of hand-written code. Reason: security code should come from a well-tested library.

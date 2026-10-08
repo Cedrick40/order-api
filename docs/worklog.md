@@ -10,3 +10,7 @@
 - Set up virtual environment, Django project, 4 apps, PostgreSQL database.
 - Created custom User model (email login, role field) before first migration.
 - First smoke test passing.
+
+- Built core error handler with standard error shape and friendly messages.
+- Built accounts: register, login (JWT), refresh, /me, admin role change.
+- Added permission classes (IsStaffRole, IsAdminRole) and 10 passing tests.
