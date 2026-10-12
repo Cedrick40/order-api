@@ -1,0 +1,7 @@
+[run]
+source = apps,core
+omit =
+    */migrations/*
+    */tests.py
+    */admin.py
+    */apps.py

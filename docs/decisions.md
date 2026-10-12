@@ -17,3 +17,9 @@
 - 2026-10-08 D15: Error handler built before any feature. Reason: every test from now on can check the standard error shape.
 - 2026-10-08 D16: Customer profile is created together with the user in one transaction at registration. Reason: no user without a profile.
 - 2026-10-08 D17: Login and token refresh use SimpleJWT's views instead of hand-written code. Reason: security code should come from a well-tested library.
+
+- 2026-10-12 D19: Customers see only active products; staff and admin see all. Reason: staff must be able to manage hidden products.
+- 2026-10-12 D20: Customers see an in_stock true/false flag, never the exact quantity. Reason: stock levels are staff-only data.
+- 2026-10-12 D21: Price and stock rules are enforced as named database CHECK constraints as well as in code. Reason: a bug in the code can't corrupt data.
+- 2026-10-12 D22: A product and its inventory row are created in one transaction. Reason: no product without a stock record.
+- 2026-10-12 D23: Every stock adjustment needs a non-zero change and a written reason. Reason: the reason goes into the audit log (Slice 4.4).

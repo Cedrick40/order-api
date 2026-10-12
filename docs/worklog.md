@@ -14,3 +14,7 @@
 - Built core error handler with standard error shape and friendly messages.
 - Built accounts: register, login (JWT), refresh, /me, admin role change.
 - Added permission classes (IsStaffRole, IsAdminRole) and 10 passing tests.
+
+- Built products and inventory (models, DB constraints, services, serializers, viewset).
+- Verified manually in Swagger and with curl (DELETE returns 405).
+- 28 tests passing, coverage report saved to evidence/.

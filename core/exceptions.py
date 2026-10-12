@@ -21,6 +21,11 @@ class AppError(APIException):
             self.code = code
         super().__init__(detail=self.message)
 
+class InsufficientStock(AppError):
+    status_code = status.HTTP_409_CONFLICT
+    code = "INSUFFICIENT_STOCK"
+    default_detail = "Not enough stock available."
+
 
 DEFAULT_MESSAGES = {
     401: ("NOT_AUTHENTICATED", "Please log in to continue. Your login may be incorrect or expired."),
