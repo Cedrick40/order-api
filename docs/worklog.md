@@ -18,3 +18,7 @@
 - Built products and inventory (models, DB constraints, services, serializers, viewset).
 - Verified manually in Swagger and with curl (DELETE returns 405).
 - 28 tests passing, coverage report saved to evidence/.
+
+- Built orders: models with DB constraints, place/confirm/cancel services, serializers, viewset.
+- Implemented D2 (duplicate product message) and D3 (plain not-found message).
+- Wrote 15 order tests and a 20-buyer concurrency test; ran the break-it-on-purpose experiment without the row lock.

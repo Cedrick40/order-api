@@ -79,3 +79,23 @@ def custom_exception_handler(exc, context):
     else:
         response.data = _body("BAD_REQUEST", "We couldn't process that request.")
     return response
+
+class DuplicateProduct(AppError):
+    status_code = status.HTTP_400_BAD_REQUEST
+    code = "DUPLICATE_PRODUCT"
+
+
+class ProductUnavailable(AppError):
+    status_code = status.HTTP_400_BAD_REQUEST
+    code = "PRODUCT_UNAVAILABLE"
+
+
+class InvalidStatusTransition(AppError):
+    status_code = status.HTTP_409_CONFLICT
+    code = "INVALID_STATUS_TRANSITION"
+
+
+class OrderNotFound(AppError):
+    status_code = status.HTTP_404_NOT_FOUND
+    code = "NOT_FOUND"
+    default_detail = "We couldn't find that order on your account."

@@ -23,3 +23,9 @@
 - 2026-10-12 D21: Price and stock rules are enforced as named database CHECK constraints as well as in code. Reason: a bug in the code can't corrupt data.
 - 2026-10-12 D22: A product and its inventory row are created in one transaction. Reason: no product without a stock record.
 - 2026-10-12 D23: Every stock adjustment needs a non-zero change and a written reason. Reason: the reason goes into the audit log (Slice 4.4).
+
+- 2026-10-13 D24: Inventory rows are locked with select_for_update in ascending product order. Reason: prevents overselling under concurrency and avoids deadlocks between orders that share products.
+- 2026-10-13 D25: All stock checks happen before any stock is changed, and every shortage is reported at once. Reason: the customer sees the whole problem in one response.
+- 2026-10-13 D26: Staff and admin accounts get a customer profile automatically on their first order. Reason: every role may place orders but an order needs a customer.
+- 2026-10-13 D27: Allowed status changes live in one transitions table. Reason: one place defines the rules.
+- 2026-10-13 D28: Unknown and inactive products give the same "isn't available" error and name no product. Reason: doesn't reveal hidden products to customers.
