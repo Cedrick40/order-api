@@ -5,6 +5,7 @@ from rest_framework.response import Response
 
 from .permissions import IsAdminRole
 from .serializers import MeSerializer, RegisterSerializer, RoleSerializer
+from . import services
 
 User = get_user_model()
 
@@ -33,3 +34,9 @@ class UserRoleView(generics.UpdateAPIView):
     serializer_class = RoleSerializer
     permission_classes = [IsAdminRole]
     http_method_names = ["patch"]
+    
+    def perform_update(self, serializer):
+        if "role" in serializer.validated_data:
+            services.change_role(
+                user=serializer.instance, new_role=serializer.validated_data["role"], actor=self.request.user
+            )

@@ -41,7 +41,7 @@ class ProductCreateSerializer(ProductSerializer):
         fields = ProductSerializer.Meta.fields + ["initial_stock"]
 
     def create(self, validated_data):
-        return services.create_product(**validated_data)
+        return services.create_product(actor=self.context["request"].user,**validated_data)
 
 
 class InventorySerializer(serializers.ModelSerializer):

@@ -29,3 +29,9 @@
 - 2026-10-13 D26: Staff and admin accounts get a customer profile automatically on their first order. Reason: every role may place orders but an order needs a customer.
 - 2026-10-13 D27: Allowed status changes live in one transitions table. Reason: one place defines the rules.
 - 2026-10-13 D28: Unknown and inactive products give the same "isn't available" error and name no product. Reason: doesn't reveal hidden products to customers.
+
+- 2026-10-12 D31: Audit entries are written inside the same transaction as the change, through one record_audit() function. Reason: a change and its record can never disagree (D11 implemented).
+- 2026-10-12 D32: Audit entries are immutable at model level and there is no API to edit or delete them. Known limitation: direct database access could still alter rows.
+- 2026-10-12 D33: Every request gets a request ID (accepted from the client only if it is a simple safe string, otherwise generated). It appears in the response header, the logs, the audit entries and 500 errors. Reason: lets a support person trace one problem across logs and audit trail.
+- 2026-10-12 D34: Logs record method, path, status, duration and user id, never bodies, headers or tokens. Reason: avoid leaking passwords and credentials into log files.
+- 2026-10-12 D35: Failed or rejected requests are not audited (they change nothing); they appear in the request log instead.

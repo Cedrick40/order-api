@@ -5,6 +5,8 @@ from rest_framework.exceptions import APIException, ValidationError
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
 
+from .request_context import request_id_var
+
 logger = logging.getLogger(__name__)
 
 
@@ -64,10 +66,10 @@ def custom_exception_handler(exc, context):
     if response is None:
         logger.exception("Unhandled server error")
         return Response(
-            _body("SERVER_ERROR", "Something went wrong on our side. Please try again."),
+            _body("SERVER_ERROR", "Something went wrong on our side. Please try again.",
+                  {"request_id": request_id_var.get()}),
             status=500,
         )
-
     if isinstance(exc, AppError):
         response.data = _body(exc.code, exc.message, exc.details)
     elif isinstance(exc, ValidationError):

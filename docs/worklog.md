@@ -22,3 +22,8 @@
 - Built orders: models with DB constraints, place/confirm/cancel services, serializers, viewset.
 - Implemented D2 (duplicate product message) and D3 (plain not-found message).
 - Wrote 15 order tests and a 20-buyer concurrency test; ran the break-it-on-purpose experiment without the row lock.
+
+- Built AuditLog, record_audit service and wired it into every write action.
+- Added request-ID middleware, structured logging to console and logs/app.log.
+- Added admin-only /audit-logs with filters and validation.
+- Wrote 13 audit/logging tests; M2 (one audit row per write) and D11 (rollback) evidenced.

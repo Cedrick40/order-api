@@ -46,11 +46,16 @@ class ProductViewSet(viewsets.ModelViewSet):
         return queryset
 
     def create(self, request, *args, **kwargs):
-        serializer = ProductCreateSerializer(data=request.data)
+        serializer = ProductCreateSerializer(data=request.data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
         product = serializer.save()
         return Response(ProductSerializer(product).data, status=status.HTTP_201_CREATED)
 
+# ADDED: Intercepting PATCH updates to route them through your service layer
+    def perform_update(self, serializer):
+        services.update_product(
+            product=serializer.instance, changes=serializer.validated_data, actor=self.request.user
+        )
     @action(detail=True, methods=["post"])
     def deactivate(self, request, pk=None):
         product = services.deactivate_product(product=self.get_object(), actor=request.user)

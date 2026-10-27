@@ -5,6 +5,7 @@ from django.db import transaction
 from rest_framework import serializers
 
 from .models import Customer
+from apps.audit.services import record_audit
 
 User = get_user_model()
 
@@ -34,6 +35,10 @@ class RegisterSerializer(serializers.Serializer):
         phone = validated_data.pop("phone", "")
         user = User.objects.create_user(**validated_data)  # email + password
         Customer.objects.create(user=user, full_name=full_name, phone=phone)
+        record_audit(
+            actor=user, action="user.registered", entity_type="user", entity_id=user.id,
+            after={"email": user.email, "role": user.role},
+        )
         return user
 
 

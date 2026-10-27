@@ -55,6 +55,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "apps.audit.middleware.RequestIDMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -159,3 +160,26 @@ SIMPLE_JWT = {
 }
 
 SPECTACULAR_SETTINGS = {"TITLE": "Secure Order Processing API", "VERSION": "1.0.0"}
+
+(BASE_DIR / "logs").mkdir(exist_ok=True)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {"request_id": {"()": "core.log_filters.RequestIDFilter"}},
+    "formatters": {
+        "standard": {"format": "%(asctime)s %(levelname)s [%(request_id)s] %(name)s: %(message)s"},
+    },
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "formatter": "standard", "filters": ["request_id"]},
+        "file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": str(BASE_DIR / "logs" / "app.log"),
+            "maxBytes": 1_000_000,
+            "backupCount": 3,
+            "formatter": "standard",
+            "filters": ["request_id"],
+        },
+    },
+    "root": {"handlers": ["console", "file"], "level": "INFO"},
+}

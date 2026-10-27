@@ -12,6 +12,7 @@ from core.exceptions import (
 )
 
 from .models import Order, OrderItem
+from apps.audit.services import record_audit
 
 ALLOWED_TRANSITIONS = {
     Order.Status.PENDING: {Order.Status.CONFIRMED, Order.Status.CANCELLED},
@@ -130,7 +131,20 @@ def place_order(*, user, items):
 
     order.total_amount = total
     order.save(update_fields=["total_amount", "updated_at"])
-    # An audit entry is written here in Slice 4.4 (same transaction).
+    record_audit(
+        actor=user,
+        action="order.placed",
+        entity_type="order",
+        entity_id=order.id,
+        after={
+            "status": order.status,
+            "total_amount": str(order.total_amount),
+            "items": [
+                {"product_id": i.product_id, "quantity": i.quantity, "unit_price": str(i.unit_price)}
+                for i in order_items
+            ],
+        },
+    )
     return order
 
 
@@ -146,8 +160,13 @@ def _check_transition(order, target):
 def confirm_order(*, order_id, actor):
     order = Order.objects.select_for_update().get(pk=order_id)
     _check_transition(order, Order.Status.CONFIRMED)
+    before = order.status
     order.status = Order.Status.CONFIRMED
     order.save(update_fields=["status", "updated_at"])
+    record_audit(
+        actor=actor, action="order.confirmed", entity_type="order", entity_id=order.id,
+        before={"status": before}, after={"status": order.status},
+    )
     return order
 
 
@@ -155,6 +174,7 @@ def confirm_order(*, order_id, actor):
 def cancel_order(*, order_id, actor):
     order = Order.objects.select_for_update().get(pk=order_id)
     _check_transition(order, Order.Status.CANCELLED)
+    before = order.status
 
     items = list(order.items.all())
     inventories = {
@@ -170,4 +190,12 @@ def cancel_order(*, order_id, actor):
 
     order.status = Order.Status.CANCELLED
     order.save(update_fields=["status", "updated_at"])
+    record_audit(
+        actor=actor, action="order.cancelled", entity_type="order", entity_id=order.id,
+        before={"status": before},
+        after={
+            "status": order.status,
+            "restored_items": [{"product_id": i.product_id, "quantity": i.quantity} for i in items],
+        },
+    )
     return order
